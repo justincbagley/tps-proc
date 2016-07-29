@@ -1,50 +1,47 @@
 #!/bin/sh
 
-##--------------------------------------------------------------------------------------##
-##--SHELL SCRIPT FOR PARSING TPS FILES TO GET CLASSIFIER VARIABLES FROM JPEG FILENAMES--##
-#---This code was written July 8, 2016 by:         -------------------------------------##
-#---Justin C. Bagley, Ph.D.                        -------------------------------------##
-#---Departamento de Zoologia                       -------------------------------------##
-#---Universidade de Brasília, Brasília, DF, Brazil -------------------------------------##
-#---For questions, please email jcbagley@unb.br    -------------------------------------##
-##--------------------------------------------------------------------------------------##
+##########################################################################################
+# <><PIrANHA            Hypostomus_tps2classifiers v1.0, July 2016                       #
+#   SHELL SCRIPT FOR PARSING TPS FILES TO GET CLASSIFIER VARIABLES FROM JPEG FILENAMES   #
+#   Copyright (c)2016 Justin C. Bagley, Universidade de Brasília, Brasília, DF, Brazil   #
+#   See the README and license files on GitHub (http://github.com/justincbagley) for     #
+#   further information. Last update: July 29, 2016. For questions, please email         #
+#   jcbagley@unb.br.                                                                     #
+##########################################################################################
+
 
 echo "
 ##########################################################################################
 #                      Hypostomus_tps2classifiers v1.0, July 2016                        #
 ##########################################################################################
 "
-#
-#
-#
-##---------------------- STEP #1: GET & CLEAN IMAGE FILENAME(S) ------------------------##
-for i in ./*.TPS                                                        ## Look for .TPS input files in current directory.
+
+############ STEP #1: GET & CLEAN IMAGE FILENAME(S)
+for i in ./*.TPS                                                        	## Look for .TPS input files in current directory.
 	do 
 	echo $i
-	grep -n "IMAGE=" ${i} > ${i}_rawNames1.txt							## Extract image filenames from TPS file by getting lines starting with "IMAGE=".
+	grep -n "IMAGE=" ${i} > ${i}_rawNames1.txt				## Extract image filenames from TPS file by getting lines starting with "IMAGE=".
 		awk -F"=" '{print $NF}' ${i}_rawNames1.txt > ${i}_rawNames2.txt	## Previous line has junk at beginning; remove it by using AWK to get filename following the equals sign.
-			sed 's/.jpg//' ${i}_rawNames2.txt > ${i}_imgNames.txt		## Use sed to remove the extension from each filename.
-	rm ${i}_rawNames1.txt ${i}_rawNames2.txt							## Remove temporary files created during preceding operations and rename output files so that they don't include initial .TPS file extensions.
+			sed 's/.jpg//' ${i}_rawNames2.txt > ${i}_imgNames.txt	## Use sed to remove the extension from each filename.
+	rm ${i}_rawNames1.txt ${i}_rawNames2.txt				## Remove temporary files created during preceding operations and rename output files so that they don't include initial .TPS file extensions.
 done
-#
-#
-#
-##-------- STEP #2: PARSE FILENAME(S) INTO CLASSIFIER FILE(S) FOR MorphoJ or R ---------##
+
+
+############ STEP #2: PARSE FILENAME(S) INTO CLASSIFIER FILE(S) FOR MorphoJ or R
 ##--EXTRACT FILENAMES of "....TPS_imgNames.txt" files output from step 1 operations above,
 ##--search and replace underscores with tab characters, and output to new "classifiers"
 ##--files:
-for j in ./*.TPS_imgNames.txt #This looks for input files with the .TPS_imgNames.txt extension/file type output in the first step.
+for j in ./*.TPS_imgNames.txt
 	do 
 	echo $j
 	sed -E 's/\_(....)\_(..)\_(...)/	\1	\2	\3/g' <${j} > ${j}_classifiers.txt
 done
-#
-#
+
 ##--ADD COLUMN OF INTEGERS FROM 0 to x for x# of rows in each classifier file... in order
 ##--to match default IDs (0 to x) in MorphoJ. THEN ADD HEADER ROWS that match the contents
 ##--of each column to each classifier file. LAST, convert lines from double to single
 ##--spacing by removing all lines containing only the end of line character \r.
-echo "ID	Code	Site	Area	Species" > header.txt	## Make header row. Change these codes as needed.
+echo "ID	Code	Site	Area	Species" > header.txt			## Make header row. Change these codes as needed.
 #
 for k in ./*.TPS_imgNames.txt_classifiers.txt
 	do
@@ -67,16 +64,16 @@ for k in ./*.TPS_imgNames.txt_classifiers.txt
 			sed -E 's/     	/	/g; s/    	/	/g; s/   	/	/g; s/SP1/sp1/g; s/SP2/sp2/g; s/SP2H/sp2/g; s/sp2H/sp2/g' <${n} > ${n}_tabFix.txt
 		done
 done
-#
-#
-#
-##-------- STEP #3: CLEANUP FILES & FILENAMES (e.g. REMOVE UNNECESSARY FILES) ----------##
+
+
+############ STEP #3: CLEANUP FILES & FILENAMES (e.g. REMOVE UNNECESSARY FILES)
 ##--The following code uses a for loop to rename the final output files that will be kept,
 ##--and then uses rm to remove any unnecessary files.
 for o in *_out.final.txt_singleSpaced.txt_tabFix.txt
 	do
 	mv $o ${o/.TPS_imgNames.txt_classifiers.txt_numCol.txt_out.final.txt_singleSpaced.txt_tabFix.txt/.classifiers.txt}
 done
+#
 rm ./header.txt
 rm ./*.TPS_imgNames.txt
 rm ./*.TPS_imgNames.txt_classifiers.txt
