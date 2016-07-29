@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ##########################################################################################
-# <><PIrANHA            Hypostomus_tps2classifiers v1.0, July 2016                       #
+#   tps-proc            Hypostomus_tps2classifiers v1.0, July 2016                       #
 #   SHELL SCRIPT FOR PARSING TPS FILES TO GET CLASSIFIER VARIABLES FROM JPEG FILENAMES   #
 #   Copyright (c)2016 Justin C. Bagley, Universidade de Brasília, Brasília, DF, Brazil   #
 #   See the README and license files on GitHub (http://github.com/justincbagley) for     #
