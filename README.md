@@ -4,7 +4,7 @@ bash shell scripts for processing and analyzing TPS files for geometric morphome
 INTRODUCTION
 -------
 
-The tps-proc repository contains a series of shell scripts that we have been using for processing .TPS files generated in [tpsDig] software by James Rohlf (REF; link#). Development of this code is on-going, and while the only script currently available is the tps2classifiers script, which pulls sample information from image names contained in one or more .TPS files in the working directory.
+The tps-proc repository contains a series of shell scripts that we have been using for processing .TPS files generated in [tpsDig] software by James Rohlf (REF; link#). Development of this code is on-going, and while the only script currently available is the tps2classifiers script, which pulls sample information from image names contained in one or more .TPS files in the working directory, we have other scripts that will be rolling out in this repository soon.
 
 LICENSE
 -------
